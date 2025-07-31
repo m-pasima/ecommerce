@@ -1,3 +1,4 @@
+
 # Ecommerce Backend Skeleton
 
 Initial Express + TypeScript backend with Prisma and JWT auth.
@@ -15,3 +16,9 @@ Run tests:
 ```bash
 npm test
 ```
+
+# ecommerce
+
+This repository will contain the e-commerce project code.
+
+
