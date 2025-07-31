@@ -1,4 +1,5 @@
-// Author: Codex
+
+// Author: Pasima
 // Date: 2025-07-31
 // Purpose: Authentication controller
 
@@ -9,12 +10,23 @@ import prisma from "../prisma";
 import { z } from 'zod';
 import env from "../config";
 
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
+import { z } from 'zod';
+
+
 const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
 export async function signup(req: Request, res: Response) {
+
+
+  const prisma = new PrismaClient();
+
   const result = signupSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error });
@@ -32,6 +44,10 @@ export async function signup(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
+
+
+  const prisma = new PrismaClient();
+
   const result = signupSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error });
@@ -41,6 +57,10 @@ export async function login(req: Request, res: Response) {
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
+
   const token = jwt.sign({ userId: user.id, role: user.role }, env.JWT_SECRET, { expiresIn: '1h' });
+
+  const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+
   res.json({ token });
 }

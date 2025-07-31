@@ -1,6 +1,8 @@
-// Author: Codex
+
+// Author: Pasima
 // Date: 2025-07-31
 // Purpose: Authentication routes
+
 
 import { Router } from 'express';
 import { login, signup } from '../controllers/authController';
