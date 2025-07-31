@@ -16,8 +16,9 @@ Run tests:
 ```bash
 npm test
 ```
-=======
+
 # ecommerce
 
 This repository will contain the e-commerce project code.
+
 
