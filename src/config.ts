@@ -10,6 +10,7 @@ dotenv.config();
 const envSchema = z.object({
   DATABASE_URL: z.string(),
   JWT_SECRET: z.string(),
+  STRIPE_SECRET: z.string().optional(),
   PORT: z.string().optional(),
 });
 

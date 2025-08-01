@@ -1,24 +1,20 @@
-
-// Author: Pasima
-// Date: 2025-07-31
-// Purpose: Express application setup
-
 import express from 'express';
-const app = express();
+import morgan from 'morgan';
+import cors from 'cors';
+import authRoutes from './routes/auth';
+import productRoutes from './routes/products';
+import cartRoutes from './routes/cart';
+import orderRoutes from './routes/orders';
 
+const app = express();
+app.use(cors());
+app.use(morgan('dev'));
 app.use(express.json());
 
-// ✅ Add this default route
-app.get('/', (req, res) => {
-  res.send('🚀 E-commerce API is running!');
-});
-
-// your other routes...
-app.use('/api/products', productRoutes);
+app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
-// server listen
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-
+export default app;

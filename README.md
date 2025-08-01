@@ -2,6 +2,7 @@
 # Ecommerce Backend Skeleton
 
 Initial Express + TypeScript backend with Prisma and JWT auth.
+Phase 2 adds product, cart and order APIs with Stripe checkout.
 
 ## Setup
 
@@ -21,6 +22,7 @@ npm run dev
 ```bash
 DATABASE_URL=postgresql://user:pass@localhost:5432/db
 JWT_SECRET=supersecret
+STRIPE_SECRET=your_stripe_key
 ```
 
 
