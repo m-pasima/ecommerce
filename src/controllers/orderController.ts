@@ -7,7 +7,9 @@ import { AuthRequest } from '../middleware/auth';
 
 const db: PrismaClient = prisma;
 
-const stripe = new Stripe(env.STRIPE_SECRET, { apiVersion: '2022-11-15' });
+const stripe = new Stripe(env.STRIPE_SECRET || 'test', {
+  apiVersion: '2022-11-15',
+});
 
 export async function checkout(req: AuthRequest, res: Response) {
   try {
@@ -48,6 +50,20 @@ export async function checkout(req: AuthRequest, res: Response) {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Checkout failed' });
+  }
+}
+
+export async function orderHistory(req: AuthRequest, res: Response) {
+  try {
+    const orders = await db.order.findMany({
+      where: { userId: req.user!.userId },
+      include: { product: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch orders' });
   }
 }
 
