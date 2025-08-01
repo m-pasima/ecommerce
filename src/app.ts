@@ -4,20 +4,21 @@
 // Purpose: Express application setup
 
 import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-
-
-import authRoutes from './routes/auth';
-
 const app = express();
-app.use(cors());
-app.use(morgan('dev'));
+
 app.use(express.json());
 
-app.get('/health', (_, res) => res.json({ status: 'ok' }));
+// ✅ Add this default route
+app.get('/', (req, res) => {
+  res.send('🚀 E-commerce API is running!');
+});
 
-app.use('/auth', authRoutes);
+// your other routes...
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
 
+// server listen
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
 
-export default app;
