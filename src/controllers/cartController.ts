@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import prisma from '../prisma';
-const db: any = prisma;
+import { PrismaClient } from '@prisma/client';
+const db: PrismaClient = prisma;
 import { AuthRequest } from '../middleware/auth';
 import { z } from 'zod';
 
@@ -17,7 +18,8 @@ export async function addToCart(req: AuthRequest, res: Response) {
       create: { userId: req.user!.userId, productId, quantity },
     });
     res.status(200).json({ message: 'Added to cart' });
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to add to cart' });
   }
 }
@@ -31,7 +33,8 @@ export async function removeFromCart(req: AuthRequest, res: Response) {
       where: { userId_productId: { userId: req.user!.userId, productId } },
     });
     res.status(200).json({ message: 'Removed' });
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(404).json({ error: 'Item not found' });
   }
 }
@@ -43,7 +46,8 @@ export async function viewCart(req: AuthRequest, res: Response) {
       include: { product: true },
     });
     res.json(items);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to fetch cart' });
   }
 }

@@ -30,7 +30,8 @@ export async function signup(req: Request, res: Response) {
       data: { email, password: hashed },
     });
     res.status(201).json({ id: user.id, email: user.email });
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(400).json({ error: 'User already exists' });
   }
 }
