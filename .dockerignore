@@ -4,3 +4,4 @@ Dockerfile
 .dockerignore
 dist
 coverage
+.env
