@@ -1,19 +1,23 @@
 {
   "name": "ecommerce",
   "version": "1.0.0",
-  "description": "",
+  "description": "Full-stack ecommerce backend with Node.js, TypeScript, Prisma, and Docker",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint ."
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint .",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.13.0",
     "bcrypt": "^6.0.0",
@@ -47,3 +51,4 @@
     "typescript": "^5.8.3"
   }
 }
+
