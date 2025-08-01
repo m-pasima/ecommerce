@@ -10,7 +10,7 @@
     "typeRoots": [
       "./node_modules/@types",
       "./src/types",
-      "./src"  // this allows `src/types.d.ts` to be picked up
+      "./src"
     ]
   },
   "include": ["src"],
