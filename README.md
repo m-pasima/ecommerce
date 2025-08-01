@@ -60,6 +60,18 @@ docker compose up --build
 
 The server will be available on `http://localhost:3000` and PostgreSQL on port `5432`.
 
+### Kubernetes
+
+Example manifests are located in the `k8s/` directory. Build and push the
+Docker image, update `k8s/app.yaml` with your image name and then apply the
+resources:
+
+```bash
+docker build -t myrepo/ecommerce-app:latest .
+docker push myrepo/ecommerce-app:latest
+kubectl apply -f k8s/
+```
+
 ## AWS Deployment
 
 1. **ECS**: Build the Docker image using the provided `Dockerfile` and push it to ECR. Create an ECS service that runs the image.
