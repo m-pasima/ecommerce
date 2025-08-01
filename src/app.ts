@@ -22,6 +22,10 @@ app.use(express.json());
 
 // ✅ Health check
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 
 // ✅ Mount API routes
 app.use('/api/auth', authRoutes);
