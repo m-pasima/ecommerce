@@ -16,7 +16,8 @@ export async function createProduct(req: Request, res: Response) {
   try {
     const product = await prisma.product.create({ data: result.data });
     res.status(201).json(product);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to create product' });
   }
 }
@@ -34,7 +35,8 @@ export async function listProducts(req: Request, res: Response) {
       prisma.product.count({ where }),
     ]);
     res.json({ products, total });
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to list products' });
   }
 }
@@ -45,7 +47,8 @@ export async function getProduct(req: Request, res: Response) {
     const product = await prisma.product.findUnique({ where: { id } });
     if (!product) return res.status(404).json({ error: 'Not found' });
     res.json(product);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to get product' });
   }
 }
@@ -59,7 +62,8 @@ export async function updateProduct(req: Request, res: Response) {
   try {
     const product = await prisma.product.update({ where: { id }, data: result.data });
     res.json(product);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(404).json({ error: 'Product not found' });
   }
 }
@@ -69,7 +73,8 @@ export async function deleteProduct(req: Request, res: Response) {
   try {
     await prisma.product.delete({ where: { id } });
     res.status(204).send();
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     res.status(404).json({ error: 'Product not found' });
   }
 }

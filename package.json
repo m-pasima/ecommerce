@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint ."
   },
   "keywords": [],
   "author": "",
@@ -33,7 +34,10 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.1.0",
     "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
     "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
     "jest": "^30.0.5",
     "prettier": "^3.6.2",
     "prisma": "^6.13.0",
