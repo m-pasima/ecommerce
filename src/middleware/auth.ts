@@ -2,16 +2,19 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import env from '../config';
 
-export interface AuthPayload { userId: number; role: string }
+// ✅ Use 'id' instead of 'userId' to match other parts of your app
+export interface AuthPayload { id: number; role: string }
 export interface AuthRequest extends Request { user?: AuthPayload }
 
 export function authenticate(req: AuthRequest, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header) return res.status(401).json({ error: 'Unauthorized' });
+
   const token = header.split(' ')[1];
+
   try {
     const payload = jwt.verify(token, env.JWT_SECRET) as AuthPayload;
-    req.user = payload;
+    req.user = payload; // ✅ req.user.id will now work
     next();
   } catch {
     res.status(401).json({ error: 'Invalid token' });
