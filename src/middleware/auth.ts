@@ -1,27 +1,28 @@
+// src/middleware/auth.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import env from '../config';
+import { AuthPayload } from '../types/AuthPayload';
 
-// ✅ Use 'id' instead of 'userId' to match other parts of your app
-export interface AuthPayload { id: number; role: string }
-export interface AuthRequest extends Request { user?: AuthPayload }
+export interface AuthRequest extends Request {
+  user?: AuthPayload;
+}
 
-export function authenticate(req: AuthRequest, res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-  if (!header) return res.status(401).json({ error: 'Unauthorized' });
+export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
 
-  const token = header.split(' ')[1];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized: No token provided' });
+  }
+
+  const token = authHeader.split(' ')[1];
 
   try {
-    const payload = jwt.verify(token, env.JWT_SECRET) as AuthPayload;
-    req.user = payload; // ✅ req.user.id will now work
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as AuthPayload;
+    req.user = decoded;
     next();
-  } catch {
-    res.status(401).json({ error: 'Invalid token' });
+  } catch (err) {
+    console.error('JWT Verification Failed:', err);
+    return res.status(403).json({ error: 'Invalid token' });
   }
-}
-
-export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction) {
-  if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
-  next();
-}
+};
