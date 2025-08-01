@@ -12,11 +12,14 @@ JWT_SECRET=supersecret
 STRIPE_SECRET=your_stripe_key
 ```
 
-Install dependencies and run the development server:
+Install dependencies and start the local PostgreSQL database before running the
+development server:
 
 ```bash
 npm install
-npx prisma migrate dev --name init # if you have access to the DB
+# start the database container in the background
+docker compose up -d db
+npx prisma migrate dev --name init
 npm run dev
 ```
 
