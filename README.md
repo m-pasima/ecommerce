@@ -31,6 +31,16 @@ Run tests:
 npm test
 ```
 
+## Docker
+
+Build and run the app together with a PostgreSQL database using Docker:
+
+```bash
+docker compose up --build
+```
+
+The server will be available on `http://localhost:3000` and the database on port `5432`.
+
 
 
 # ecommerce
