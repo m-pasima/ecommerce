@@ -1,88 +1,196 @@
-# Ecommerce Backend Skeleton
+# 🛒 E-commerce Backend API – Express + TypeScript + Prisma
 
-This project is an Express + TypeScript backend using Prisma and JWT authentication. It provides product, cart and order APIs with Stripe checkout support.
+This project is a modern, backend skeleton for an e-commerce platform built with **Express**, **TypeScript**, **Prisma**, and **JWT authentication**. It includes full CRUD operations for products, a shopping cart, order checkout with Stripe integration, and a PostgreSQL backend via Docker Compose.
 
-## Setup
+---
 
-Create a `.env` file with the following variables:
+## 📦 Features
 
-```bash
+- ⚙️ Express.js server with modular routing
+- 🛡️ JWT-based authentication & authorization
+- 🧩 Prisma ORM with PostgreSQL
+- 🛒 Product, Cart, and Order APIs
+- 💳 Stripe Checkout integration
+- 🐳 Docker + Docker Compose support
+- ✅ REST API with OpenAPI (Swagger) documentation
+- 🌱 Ready for local dev, containerized deployment, or Kubernetes
+
+---
+
+## 🚀 Quickstart (Local Development)
+
+### 1️⃣ Clone and Setup Environment
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
 DATABASE_URL=postgresql://user:pass@localhost:5432/db
 JWT_SECRET=supersecret
 STRIPE_SECRET=your_stripe_key
-```
+````
 
-Install dependencies and start the local PostgreSQL database before running the
-development server:
+### 2️⃣ Install Dependencies
 
 ```bash
 npm install
-# start the database container in the background
+```
+
+### 3️⃣ Start PostgreSQL (Docker)
+
+```bash
 docker compose up -d db
+```
+
+Ensure the `docker-compose.yml` contains a `db` service configured for PostgreSQL.
+
+### 4️⃣ Initialize Database
+
+```bash
 npx prisma migrate dev --name init
+```
+
+### 5️⃣ Run Dev Server
+
+```bash
 npm run dev
 ```
 
-Run tests:
+---
+
+## 🧪 Running Tests
 
 ```bash
 npm test
 ```
 
-## API Endpoints
+---
 
-| Method | Path | Description |
-| ------ | ---- | ----------- |
-| GET | `/health` | Health check |
-| POST | `/api/auth/signup` | Register a new user |
-| POST | `/api/auth/login` | Login and receive JWT |
-| GET | `/api/products` | List products |
-| GET | `/api/products/:id` | Get a single product |
-| POST | `/api/products` | Create product (admin) |
-| PUT | `/api/products/:id` | Update product (admin) |
-| DELETE | `/api/products/:id` | Delete product (admin) |
-| GET | `/api/cart` | View current cart (auth) |
-| POST | `/api/cart/add` | Add product to cart (auth) |
-| POST | `/api/cart/remove` | Remove product from cart (auth) |
-| POST | `/api/orders/checkout` | Checkout and create payment (auth) |
-| GET | `/api/orders` | View order history (auth) |
+## 🔗 API Endpoints
 
-Authenticated routes expect a `Bearer` token in the `Authorization` header.
+> All authenticated routes require a `Bearer <token>` in the `Authorization` header.
 
-### OpenAPI
+| Method | Endpoint               | Description                    |
+| ------ | ---------------------- | ------------------------------ |
+| GET    | `/health`              | Health check                   |
+| POST   | `/api/auth/signup`     | Register a new user            |
+| POST   | `/api/auth/login`      | Login and receive JWT token    |
+| GET    | `/api/products`        | List all products              |
+| GET    | `/api/products/:id`    | Get a specific product         |
+| POST   | `/api/products`        | Create product *(admin only)*  |
+| PUT    | `/api/products/:id`    | Update product *(admin only)*  |
+| DELETE | `/api/products/:id`    | Delete product *(admin only)*  |
+| GET    | `/api/cart`            | View cart *(auth required)*    |
+| POST   | `/api/cart/add`        | Add item to cart *(auth)*      |
+| POST   | `/api/cart/remove`     | Remove item from cart *(auth)* |
+| POST   | `/api/orders/checkout` | Checkout and pay *(auth)*      |
+| GET    | `/api/orders`          | View order history *(auth)*    |
 
-A full OpenAPI specification can be found in [`docs/openapi.yaml`](docs/openapi.yaml). Tools like Swagger UI can be used to visualize the documentation.
+---
 
-## Docker
+## 📘 API Documentation (OpenAPI/Swagger)
 
-Build and run the app together with a PostgreSQL database using Docker Compose:
+The OpenAPI spec is located at:
+
+```
+docs/openapi.yaml
+```
+
+You can visualize it using [Swagger UI](https://editor.swagger.io/) or integrate with Postman.
+
+---
+
+## 🐳 Docker Compose (Full Stack)
+
+To run the **backend app and PostgreSQL together** in containers:
 
 ```bash
 docker compose up --build
 ```
 
-The server will be available on `http://localhost:3000` and PostgreSQL on port `5432`.
+* App: `http://localhost:3000`
+* DB:  `localhost:5432`
 
-### Kubernetes
+---
 
-Example manifests are located in the `k8s/` directory. Build and push the
-Docker image, update `k8s/app.yaml` with your image name and then apply the
-resources:
+## ☸️ Kubernetes Deployment
 
-```bash
-docker build -t myrepo/ecommerce-app:latest .
-docker push myrepo/ecommerce-app:latest
-kubectl apply -f k8s/
+1. Build and push Docker image:
+
+   ```bash
+   docker build -t myrepo/ecommerce-app:latest .
+   docker push myrepo/ecommerce-app:latest
+   ```
+
+2. Update image name in `k8s/app.yaml`.
+
+3. Apply manifests:
+
+   ```bash
+   kubectl apply -f k8s/
+   ```
+
+---
+
+## ☁️ AWS Deployment (ECS + RDS)
+
+### ECS Setup
+
+* Build Docker image → Push to ECR
+* Create ECS Task Definition with:
+
+  * `DATABASE_URL`
+  * `JWT_SECRET`
+  * `STRIPE_SECRET`
+* Deploy as ECS Service
+
+### RDS Setup
+
+* Create a PostgreSQL instance
+* Update `.env` with your RDS `DATABASE_URL`
+
+### Security Groups
+
+* ALB → ECS on port `3000`
+* ECS → RDS on port `5432`
+
+> Optional: Use ALB for HTTPS termination
+
+---
+
+## 📁 Project Structure
+
+```
+├── prisma/                 # Prisma schema and migrations
+├── src/
+│   ├── controllers/        # Route handlers
+│   ├── middleware/         # Auth middleware
+│   ├── routes/             # API route definitions
+│   ├── utils/              # Helper utilities
+│   └── index.ts            # App entry point
+├── .env
+├── docker-compose.yml
+├── Dockerfile
+├── tsconfig.json
+└── README.md
 ```
 
-## AWS Deployment
+---
 
-1. **ECS**: Build the Docker image using the provided `Dockerfile` and push it to ECR. Create an ECS service that runs the image.
-2. **RDS**: Provision a PostgreSQL database in Amazon RDS. Update `DATABASE_URL` to point to the RDS endpoint.
-3. **Environment Variables**: Configure the ECS task definition with `DATABASE_URL`, `JWT_SECRET` and `STRIPE_SECRET`.
-4. **Security Groups**: Allow inbound traffic from the load balancer to the ECS service on port 3000 and permit the ECS tasks to reach the RDS instance on port 5432.
-5. Optionally place an Application Load Balancer in front of the ECS service for HTTPS termination.
+## 🧠 Contributing & Roadmap
 
-# ecommerce
+* ✅ Add unit tests for all services
+* ✅ Include role-based access control (RBAC)
+* 🛠 Add pagination and filtering to product list
+* 🛠 Admin dashboard frontend (WIP)
 
-This repository contains the e-commerce project code.
+PRs and Issues are welcome!
+
+---
+
+## 📜 License
+
+MIT © \[Pasima]
+
+```
+
+
