@@ -18,9 +18,9 @@ export async function addToCart(req: AuthRequest, res: Response) {
   const { productId, quantity } = result.data;
   try {
     await db.cartItem.upsert({
-      where: { userId_productId: { userId: req.user!.id, productId } },
+      where: { userId_productId: { userId: req.user!.userId, productId } },
       update: { quantity: { increment: quantity } },
-      create: { userId: req.user!.id, productId, quantity },
+      create: { userId: req.user!.userId, productId, quantity },
     });
     res.status(200).json({ message: 'Added to cart' });
   } catch (error) {
@@ -36,7 +36,7 @@ export async function removeFromCart(req: AuthRequest, res: Response) {
   const { productId } = result.data;
   try {
     await db.cartItem.delete({
-      where: { userId_productId: { userId: req.user!.id, productId } },
+      where: { userId_productId: { userId: req.user!.userId, productId } },
     });
     res.status(200).json({ message: 'Removed' });
   } catch (error) {
@@ -48,7 +48,7 @@ export async function removeFromCart(req: AuthRequest, res: Response) {
 export async function viewCart(req: AuthRequest, res: Response) {
   try {
     const items = await db.cartItem.findMany({
-      where: { userId: req.user!.id },
+      where: { userId: req.user!.userId },
       include: { product: true },
     });
     res.json(items);
