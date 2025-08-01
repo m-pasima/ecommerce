@@ -9,7 +9,7 @@ Create a `.env` file with the following variables:
 ```bash
 DATABASE_URL=postgresql://user:pass@localhost:5432/db
 JWT_SECRET=supersecret
-STRIPE_SECRET_KEY=your_stripe_key
+STRIPE_SECRET=your_stripe_key
 ```
 
 Install dependencies and run the development server:
@@ -64,7 +64,7 @@ The server will be available on `http://localhost:3000` and PostgreSQL on port `
 
 1. **ECS**: Build the Docker image using the provided `Dockerfile` and push it to ECR. Create an ECS service that runs the image.
 2. **RDS**: Provision a PostgreSQL database in Amazon RDS. Update `DATABASE_URL` to point to the RDS endpoint.
-3. **Environment Variables**: Configure the ECS task definition with `DATABASE_URL`, `JWT_SECRET` and `STRIPE_SECRET_KEY`.
+3. **Environment Variables**: Configure the ECS task definition with `DATABASE_URL`, `JWT_SECRET` and `STRIPE_SECRET`.
 4. **Security Groups**: Allow inbound traffic from the load balancer to the ECS service on port 3000 and permit the ECS tasks to reach the RDS instance on port 5432.
 5. Optionally place an Application Load Balancer in front of the ECS service for HTTPS termination.
 
